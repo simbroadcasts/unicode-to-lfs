@@ -126,4 +126,18 @@ describe("unicodeToLfs", () => {
       unicodeToLfs("abcěšшю", { isNullTerminated: false, length: 9 })
     ).toEqual("abc^Eì\x9A\0\0");
   });
+
+  it("should convert special characters to escape codes", () => {
+    expect(unicodeToLfs("|")).toEqual("^v");
+    expect(unicodeToLfs("*")).toEqual("^a");
+    expect(unicodeToLfs(":")).toEqual("^c");
+    expect(unicodeToLfs("\\")).toEqual("^d");
+    expect(unicodeToLfs("/")).toEqual("^s");
+    expect(unicodeToLfs("?")).toEqual("^q");
+    expect(unicodeToLfs('"')).toEqual("^t");
+    expect(unicodeToLfs("<")).toEqual("^l");
+    expect(unicodeToLfs(">")).toEqual("^r");
+    expect(unicodeToLfs("#")).toEqual("^h");
+    expect(unicodeToLfs("^")).toEqual("^^");
+  });
 });

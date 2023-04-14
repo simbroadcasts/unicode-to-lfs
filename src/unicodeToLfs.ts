@@ -2,6 +2,19 @@ import { cpTables } from "./codepageTables";
 
 const codepages = ["L", "G", "C", "E", "T", "B", "J", "H", "S", "K", "8"];
 
+const specials: Record<string, string> = {
+  "|": "^v",
+  "*": "^a",
+  ":": "^c",
+  "\\": "^d",
+  "/": "^s",
+  "?": "^q",
+  '"': "^t",
+  "<": "^l",
+  ">": "^r",
+  "#": "^h",
+};
+
 /**
  * Converts a Unicode string to a null-terminated LFS-encoded string.
  *
@@ -17,6 +30,13 @@ export function unicodeToLfs(
   }
 ): string {
   const { isNullTerminated, length } = options;
+
+  value = value.split(/\^(?![\dLGCJETBHSK])/).join("^^");
+  value = value.replaceAll(/\^[LGCJETBHSK]/g, "");
+
+  for (let i in specials) {
+    value = value.split(i).join(specials[i]);
+  }
 
   let currentCodepage = "^L";
   let tempBytes = new Uint16Array(2);
@@ -34,25 +54,6 @@ export function unicodeToLfs(
     i < value.length && index < totalLength - nullByteLength;
     i++
   ) {
-    // Remove any existing language tags from the string
-    const next = i + 1;
-    if (value[i] == "^" && next < value.length) {
-      switch (value[next]) {
-        case "L":
-        case "G":
-        case "C":
-        case "J":
-        case "E":
-        case "T":
-        case "B":
-        case "H":
-        case "S":
-        case "K":
-          i++; // skip codepage chars
-          continue;
-      }
-    }
-
     if (value.charCodeAt(i) <= 127) {
       // All codepages share ASCII values
       buffer[index++] = value.charCodeAt(i);
