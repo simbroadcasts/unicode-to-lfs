@@ -32,7 +32,7 @@ export function unicodeToLfs(
   const { isNullTerminated, length } = options;
 
   value = value.split(/\^(?![\dLGCJETBHSK])/).join("^^");
-  value = value.replaceAll(/\^[LGCJETBHSK]/g, "");
+  value = value.split(/\^[LGCJETBHSK]/g).join("");
 
   for (let i in specials) {
     value = value.split(i).join(specials[i]);
