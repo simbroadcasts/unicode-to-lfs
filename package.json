@@ -2,6 +2,14 @@
   "name": "unicode-to-lfs",
   "version": "1.0.0",
   "description": "Convert Unicode messages to LFS",
+  "keywords": [
+    "lfs",
+    "live for speed",
+    "unicode",
+    "utf-8",
+    "string",
+    "encoding"
+  ],
   "repository": "git@github.com:simbroadcasts/unicode-to-lfs.git",
   "author": "Martin Kapal <flamecze@gmail.com>",
   "license": "MIT",
