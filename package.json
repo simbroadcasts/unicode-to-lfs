@@ -1,0 +1,46 @@
+{
+  "name": "unicode-to-lfs",
+  "version": "1.0.0",
+  "description": "Convert Unicode messages to LFS",
+  "repository": "git@github.com:simbroadcasts/unicode-to-lfs.git",
+  "author": "Martin Kapal <flamecze@gmail.com>",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs",
+  "files": [
+    "dist",
+    "!dist/codepageTables.d.ts"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "run-s build:*",
+    "build:js": "esbuild src/index.ts --bundle --format=cjs --outdir=dist",
+    "build:ts": "tsc --emitDeclarationOnly",
+    "dev": "tsx watch src/index.ts",
+    "format": "run-s \"format:no-write --write\"",
+    "format:no-write": "prettier \"./**/*.{js,ts,md,json}\"",
+    "format:check": "run-s \"format:no-write --check\"",
+    "test": "jest",
+    "example": "node example/index.js",
+    "bump": "node scripts/bump.mjs",
+    "prepack": "run-s build"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "chalk": "^5.2.0",
+    "esbuild": "^0.17.16",
+    "esbuild-node-externals": "^1.7.0",
+    "jest": "^29.5.0",
+    "jest-junit": "^15.0.0",
+    "microbundle": "^0.15.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.7",
+    "rimraf": "^5.0.0",
+    "semver": "^7.4.0",
+    "ts-jest": "^29.1.0",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.4"
+  }
+}
