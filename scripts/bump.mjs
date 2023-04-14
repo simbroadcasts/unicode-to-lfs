@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import { checkAnswerOrExit, execSyncAndLog } from "./utils.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const mainBranch = "master";
+const mainBranch = "main";
 
 const rl = readline.createInterface({
   input: process.stdin,
