@@ -16,7 +16,7 @@ const specials: Record<string, string> = {
 };
 
 /**
- * Converts a Unicode string to a null-terminated LFS-encoded string.
+ * Converts a Unicode string to an LFS-encoded string.
  *
  * Inspired by the implementation from [InSim.NET]{@link https://github.com/alexmcbride/insimdotnet/blob/ef25f20fb98dcaa3bbddf6726f4290f2377597ff/InSimDotNet/LfsUnicodeEncoding.cs}
  **/
@@ -31,9 +31,13 @@ export function unicodeToLfs(
 ): string {
   const { isNullTerminated, length } = options;
 
-  value = value.split(/\^(?![\dLGCJETBHSK])/).join("^^");
-  value = value.split(/\^[LGCJETBHSK]/g).join("");
+  // Remove any existing language tags from the string
+  value = value.split(new RegExp(`\\^[${codepages.join("")}]`)).join("");
 
+  // Escape ^ if not followed by a numeric colour code
+  value = value.split(/\^(?!\d)/).join("^^");
+
+  // Escape special characters
   for (let i in specials) {
     value = value.split(i).join(specials[i]);
   }

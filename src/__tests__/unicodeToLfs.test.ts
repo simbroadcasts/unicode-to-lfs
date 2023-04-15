@@ -128,16 +128,16 @@ describe("unicodeToLfs", () => {
   });
 
   it("should convert special characters to escape codes", () => {
-    expect(unicodeToLfs("|")).toEqual("^v");
-    expect(unicodeToLfs("*")).toEqual("^a");
-    expect(unicodeToLfs(":")).toEqual("^c");
-    expect(unicodeToLfs("\\")).toEqual("^d");
-    expect(unicodeToLfs("/")).toEqual("^s");
-    expect(unicodeToLfs("?")).toEqual("^q");
-    expect(unicodeToLfs('"')).toEqual("^t");
-    expect(unicodeToLfs("<")).toEqual("^l");
-    expect(unicodeToLfs(">")).toEqual("^r");
-    expect(unicodeToLfs("#")).toEqual("^h");
-    expect(unicodeToLfs("^")).toEqual("^^");
+    expect(unicodeToLfs("| test |")).toEqual("^v test ^v");
+    expect(unicodeToLfs("* test *")).toEqual("^a test ^a");
+    expect(unicodeToLfs(": test :")).toEqual("^c test ^c");
+    expect(unicodeToLfs("\\ test \\")).toEqual("^d test ^d");
+    expect(unicodeToLfs("/ test /")).toEqual("^s test ^s");
+    expect(unicodeToLfs("? test ?")).toEqual("^q test ^q");
+    expect(unicodeToLfs('" test "')).toEqual("^t test ^t");
+    expect(unicodeToLfs("< test <")).toEqual("^l test ^l");
+    expect(unicodeToLfs("> test >")).toEqual("^r test ^r");
+    expect(unicodeToLfs("# test #")).toEqual("^h test ^h");
+    expect(unicodeToLfs("^ test ^")).toEqual("^^ test ^^");
   });
 });
