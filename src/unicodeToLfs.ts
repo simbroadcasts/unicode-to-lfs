@@ -25,21 +25,22 @@ export function unicodeToLfs(
   options: {
     isNullTerminated?: boolean;
     length?: number;
-  } = {
-    isNullTerminated: false,
-  }
+    shouldEscapeSpecialCharacters?: boolean;
+  } = {}
 ): string {
-  const { isNullTerminated, length } = options;
+  const { isNullTerminated = false, length, shouldEscapeSpecialCharacters = true } = options;
 
   // Remove any existing language tags from the string
   value = value.split(new RegExp(`\\^[${codepages.join("")}]`)).join("");
 
-  // Escape ^ if not followed by a numeric colour code
-  value = value.split(/\^(?!\d)/).join("^^");
+  if (shouldEscapeSpecialCharacters) {
+    // Escape ^ if not followed by a numeric colour code
+    value = value.split(/\^(?!\d)/).join("^^");
 
-  // Escape special characters
-  for (let i in specials) {
-    value = value.split(i).join(specials[i]);
+    // Escape special characters
+    for (let i in specials) {
+      value = value.split(i).join(specials[i]);
+    }
   }
 
   let currentCodepage = "^L";
