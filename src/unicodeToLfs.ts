@@ -1,19 +1,5 @@
 import { cpTables } from "./codepageTables";
-
-const codepages = ["L", "G", "C", "E", "T", "B", "J", "H", "S", "K", "8"];
-
-const specials: Record<string, string> = {
-  "|": "^v",
-  "*": "^a",
-  ":": "^c",
-  "\\": "^d",
-  "/": "^s",
-  "?": "^q",
-  '"': "^t",
-  "<": "^l",
-  ">": "^r",
-  "#": "^h",
-};
+import { Codepage, codepages } from "./codepages";
 
 /**
  * Converts a Unicode string to an LFS-encoded string.
@@ -47,7 +33,7 @@ export function unicodeToLfs(
     }
   }
 
-  let currentCodepage = "^L";
+  let currentCodepage: Codepage = "L";
   let tempBytes = new Uint16Array(2);
   let tempCount;
   let index = 0;
@@ -131,7 +117,7 @@ export function unicodeToLfs(
     .join("");
 }
 
-function tryGetBytes(value: string, codepage: string): Uint16Array {
+function tryGetBytes(value: string, codepage: Codepage): Uint16Array {
   try {
     return getBytes(value, codepage);
   } catch (e) {
@@ -139,13 +125,13 @@ function tryGetBytes(value: string, codepage: string): Uint16Array {
   }
 }
 
-function getBytes(character: string, charset: string): Uint16Array {
+function getBytes(character: string, codepage: Codepage): Uint16Array {
   const charCode = character.charCodeAt(0);
 
   let data: Uint16Array | undefined = undefined;
 
   Object.entries(cpTables).every(([cp, charMap]) => {
-    if (!cp.startsWith(charset)) {
+    if (!cp.startsWith(codepage)) {
       return true;
     }
 
@@ -177,3 +163,16 @@ function getBytes(character: string, charset: string): Uint16Array {
 
   return data;
 }
+
+const specials: Record<string, string> = {
+  "|": "^v",
+  "*": "^a",
+  ":": "^c",
+  "\\": "^d",
+  "/": "^s",
+  "?": "^q",
+  '"': "^t",
+  "<": "^l",
+  ">": "^r",
+  "#": "^h",
+};
