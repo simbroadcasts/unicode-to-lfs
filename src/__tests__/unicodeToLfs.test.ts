@@ -127,17 +127,53 @@ describe("unicodeToLfs", () => {
     ).toEqual("abc^Eì\x9A\0\0");
   });
 
-  it("should convert special characters to escape codes", () => {
-    expect(unicodeToLfs("| test |")).toEqual("^v test ^v");
-    expect(unicodeToLfs("* test *")).toEqual("^a test ^a");
-    expect(unicodeToLfs(": test :")).toEqual("^c test ^c");
-    expect(unicodeToLfs("\\ test \\")).toEqual("^d test ^d");
-    expect(unicodeToLfs("/ test /")).toEqual("^s test ^s");
-    expect(unicodeToLfs("? test ?")).toEqual("^q test ^q");
-    expect(unicodeToLfs('" test "')).toEqual("^t test ^t");
-    expect(unicodeToLfs("< test <")).toEqual("^l test ^l");
-    expect(unicodeToLfs("> test >")).toEqual("^r test ^r");
-    expect(unicodeToLfs("# test #")).toEqual("^h test ^h");
-    expect(unicodeToLfs("^ test ^")).toEqual("^^ test ^^");
+  it("should not convert any special characters to escape codes by default", () => {
+    expect(unicodeToLfs("| test |")).toEqual("| test |");
+    expect(unicodeToLfs("* test *")).toEqual("* test *");
+    expect(unicodeToLfs(": test :")).toEqual(": test :");
+    expect(unicodeToLfs("\\ test \\")).toEqual("\\ test \\");
+    expect(unicodeToLfs("/ test /")).toEqual("/ test /");
+    expect(unicodeToLfs("? test ?")).toEqual("? test ?");
+    expect(unicodeToLfs('" test "')).toEqual('" test "');
+    expect(unicodeToLfs("< test <")).toEqual("< test <");
+    expect(unicodeToLfs("> test >")).toEqual("> test >");
+    expect(unicodeToLfs("# test #")).toEqual("# test #");
+    expect(unicodeToLfs("^ test ^")).toEqual("^ test ^");
+  });
+
+  it("should convert special characters to escape codes if `shouldEscapeSpecialCharacters` is `true`", () => {
+    expect(
+      unicodeToLfs("| test |", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^v test ^v");
+    expect(
+      unicodeToLfs("* test *", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^a test ^a");
+    expect(
+      unicodeToLfs(": test :", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^c test ^c");
+    expect(
+      unicodeToLfs("\\ test \\", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^d test ^d");
+    expect(
+      unicodeToLfs("/ test /", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^s test ^s");
+    expect(
+      unicodeToLfs("? test ?", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^q test ^q");
+    expect(
+      unicodeToLfs('" test "', { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^t test ^t");
+    expect(
+      unicodeToLfs("< test <", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^l test ^l");
+    expect(
+      unicodeToLfs("> test >", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^r test ^r");
+    expect(
+      unicodeToLfs("# test #", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^h test ^h");
+    expect(
+      unicodeToLfs("^ test ^", { shouldEscapeSpecialCharacters: true })
+    ).toEqual("^^ test ^^");
   });
 });
