@@ -9,11 +9,14 @@ This module is designed to be used with NodeJS on the server with an InSim libra
 ## Install
 
 ```bash
+# Install with NPM
+npm i unicode-to-lfs
+
 # Install with Yarn
 yarn add unicode-to-lfs
 
-# Install with NPM
-npm i unicode-to-lfs
+# Install with pnpm
+pnpm add unicode-to-lfs
 ```
 
 ## Usage
