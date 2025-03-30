@@ -12,7 +12,7 @@ export function unicodeToLfs(
     isNullTerminated?: boolean;
     length?: number;
     shouldEscapeSpecialCharacters?: boolean;
-  } = {}
+  } = {},
 ): string {
   const {
     isNullTerminated = false,
@@ -111,7 +111,7 @@ export function unicodeToLfs(
 
   const bytes = new Uint16Array(buffer).slice(
     0,
-    length ?? index + nullByteLength
+    length ?? index + nullByteLength,
   );
 
   return Array.from(bytes)
@@ -119,7 +119,10 @@ export function unicodeToLfs(
     .join("");
 }
 
-function tryGetBytes(value: string, codepage: Codepage): Uint16Array {
+function tryGetBytes(
+  value: string,
+  codepage: Codepage,
+): Uint16Array<ArrayBuffer> {
   try {
     return getBytes(value, codepage);
   } catch (e) {
@@ -127,7 +130,10 @@ function tryGetBytes(value: string, codepage: Codepage): Uint16Array {
   }
 }
 
-function getBytes(character: string, codepage: Codepage): Uint16Array {
+function getBytes(
+  character: string,
+  codepage: Codepage,
+): Uint16Array<ArrayBuffer> {
   const charCode = character.charCodeAt(0);
 
   let data: Uint16Array | undefined = undefined;
