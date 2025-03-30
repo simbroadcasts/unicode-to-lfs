@@ -16,7 +16,7 @@ yarn add unicode-to-lfs
 npm i unicode-to-lfs
 ```
 
-## Usage Example
+## Usage
 
 ```ts
 import unicodeToLfs from "unicode-to-lfs";
@@ -31,7 +31,14 @@ console.log(encodedString2);
 // Output: ^JÏ
 ```
 
-### Options
+### Special characters
+
+Special care needs to be taken when converting caret (`^`) and slash (`/`) characters:
+
+- A caret needs to be escaped as `^^` because the caret symbol acts as an escape character in LFS. Sending `^^hello` as a message will display `^hello` in LFS.
+- A slash needs to be escaped as `^s`, otherwise it is treated as an LFS in-game command prefix when used in a message packet. Sending `^shello` as a message will display `/hello` in LFS.
+
+## Options
 
 #### `length`
 
