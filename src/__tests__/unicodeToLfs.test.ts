@@ -73,6 +73,20 @@ describe("unicodeToLfs", () => {
     );
   });
 
+  it(`should keep special character escape codes`, () => {
+    expect(unicodeToLfs("^v")).toEqual("^v");
+    expect(unicodeToLfs("^a")).toEqual("^a");
+    expect(unicodeToLfs("^c")).toEqual("^c");
+    expect(unicodeToLfs("^d")).toEqual("^d");
+    expect(unicodeToLfs("^s")).toEqual("^s");
+    expect(unicodeToLfs("^q")).toEqual("^q");
+    expect(unicodeToLfs("^t")).toEqual("^t");
+    expect(unicodeToLfs("^l")).toEqual("^l");
+    expect(unicodeToLfs("^r")).toEqual("^r");
+    expect(unicodeToLfs("^h")).toEqual("^h");
+    expect(unicodeToLfs("^^")).toEqual("^^");
+  });
+
   it(`should trim the output string to the provided length including the null terminator`, () => {
     expect(unicodeToLfs("abc", { isNullTerminated: true, length: 6 })).toEqual(
       "abc\0\0\0",
