@@ -21,7 +21,9 @@ export function unicodeToLfs(
   } = options;
 
   // Remove any existing language tags from the string
-  value = value.split(new RegExp(`\\^[${codepages.join("")}]`)).join("");
+  value = value
+    .split(new RegExp(String.raw`\^[${codepages.join("")}]`))
+    .join("");
 
   if (shouldEscapeSpecialCharacters) {
     // Escape ^ if not followed by a numeric colour code
