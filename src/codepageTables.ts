@@ -1,5 +1,3 @@
-import type { Codepage } from "./codepages";
-
 /**
  * Unicode to LFS codepage lookup tables
  *
@@ -7,10 +5,7 @@ import type { Codepage } from "./codepages";
  *
  * @internal
  */
-export const cpTables: Record<
-  `${Codepage}${string}`,
-  Record<number, number>
-> = {
+export const cpTables = {
   E: {
     8364: 128,
     8218: 130,
@@ -61646,4 +61641,4 @@ export const cpTables: Record<
     32690: 65021,
     35440: 65022,
   },
-};
+} as const;
