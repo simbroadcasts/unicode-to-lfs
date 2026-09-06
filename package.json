@@ -24,7 +24,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "run-s build:*",
-    "build:js": "esbuild src/index.ts --bundle --format=cjs --outdir=dist",
+    "build:js": "esbuild src/index.ts --bundle --format=cjs --outdir=dist --minify",
     "build:ts": "tsc --emitDeclarationOnly",
     "dev": "tsx watch src/index.ts",
     "format": "run-s \"format:no-write --write\"",
