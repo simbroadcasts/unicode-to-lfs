@@ -46,23 +46,31 @@ export function unicodeToLfs(
   const totalLength = length ?? value.length * 4 + nullByteLength;
   const buffer = new Uint16Array(totalLength);
 
+  // Split by code point, not UTF-16 code unit, so astral characters (e.g. emoji) are treated as one character
+  const characters = Array.from(value);
+
   for (
     let i = 0;
-    i < value.length && index < totalLength - nullByteLength;
+    i < characters.length && index < totalLength - nullByteLength;
     i++
   ) {
-    if (value.charCodeAt(i) <= 127) {
+    const character = characters[i];
+    const charCode = character.codePointAt(0) ?? 0;
+
+    if (charCode <= 127) {
       // All codepages share ASCII values
-      buffer[index++] = value.charCodeAt(i);
+      buffer[index++] = charCode;
       continue;
     }
 
-    tempBytes = tryGetBytes(value[i], currentCodepage);
+    tempBytes = tryGetBytes(character, currentCodepage);
     tempCount = tempBytes.length;
 
     if (tempBytes.length > 0) {
       // Character exists in current codepage
-      buffer.set(tempBytes.slice(0, tempCount), index);
+      if (index + tempCount <= totalLength - nullByteLength) {
+        buffer.set(tempBytes.slice(0, tempCount), index);
+      }
       index += tempCount;
     } else {
       // Search for new codepage
@@ -73,14 +81,14 @@ export function unicodeToLfs(
           return true;
         }
 
-        tempBytes = tryGetBytes(value[i], codepage);
+        tempBytes = tryGetBytes(character, codepage);
         tempCount = tempBytes.length;
 
         if (tempCount > 0) {
           // Switch codepage
           currentCodepage = codepage;
 
-          if (index + 2 >= totalLength - nullByteLength) {
+          if (index + 2 + tempCount > totalLength - nullByteLength) {
             // Do not copy any more bytes to buffer if it would exceed the max length
             index += tempCount + 2;
             found = true;

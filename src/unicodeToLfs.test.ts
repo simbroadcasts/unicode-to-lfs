@@ -155,6 +155,24 @@ describe("unicodeToLfs", () => {
     expect(unicodeToLfs("^ test ^")).toEqual("^ test ^");
   });
 
+  it("should pad with NULL bytes instead of throwing when truncation splits a double-byte character within the active codepage", () => {
+    expect(unicodeToLfs("어어", { length: 5 })).toEqual("^K\xBE\xEE\0");
+  });
+
+  it("should pad with NULL bytes instead of throwing when a codepage switch has room for the control characters but not the character's data bytes", () => {
+    expect(unicodeToLfs("aaaaa어", { length: 8 })).toEqual("aaaaa\0\0\0");
+  });
+
+  it("should reserve room for the NULL terminator instead of letting character data overwrite it", () => {
+    expect(
+      unicodeToLfs("aaaa어", { length: 8, isNullTerminated: true }),
+    ).toEqual("aaaa\0\0\0\0");
+  });
+
+  it("should treat an astral-plane character (surrogate pair) as a single character", () => {
+    expect(unicodeToLfs("hi \u{1F600} bye")).toEqual("hi ? bye");
+  });
+
   it("should convert special characters to escape codes if `shouldEscapeSpecialCharacters` is `true`", () => {
     expect(
       unicodeToLfs("| test |", { shouldEscapeSpecialCharacters: true }),
