@@ -69,7 +69,7 @@ export function unicodeToLfs(
       let found = false;
 
       codepages.every((codepage) => {
-        if (codepage == currentCodepage) {
+        if (codepage === currentCodepage) {
           return true;
         }
 
