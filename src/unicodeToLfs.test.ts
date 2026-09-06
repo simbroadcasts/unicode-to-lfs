@@ -1,4 +1,4 @@
-import { unicodeToLfs } from "../unicodeToLfs";
+import { unicodeToLfs } from "./unicodeToLfs";
 
 describe("unicodeToLfs", () => {
   it(`should keep ASCII characters`, () => {
