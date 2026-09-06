@@ -138,6 +138,21 @@ function tryGetBytes(
   }
 }
 
+const charMapsByCodepage = Object.entries(cpTables).reduce(
+  (acc, [cp, charMap]) => {
+    const codepage = codepages.find((codepage) => cp.startsWith(codepage));
+
+    if (codepage === undefined) {
+      throw new Error(`Unknown codepage prefix in cpTables key: ${cp}`);
+    }
+
+    (acc[codepage] ??= []).push(charMap);
+
+    return acc;
+  },
+  {} as Record<Codepage, Record<number, number>[]>,
+);
+
 function getBytes(
   character: string,
   codepage: Codepage,
@@ -146,11 +161,7 @@ function getBytes(
 
   let data: Uint16Array | undefined = undefined;
 
-  Object.entries(cpTables).every(([cp, charMap]) => {
-    if (!cp.startsWith(codepage)) {
-      return true;
-    }
-
+  (charMapsByCodepage[codepage] ?? []).every((charMap) => {
     const encodedCharCode = charMap[charCode];
 
     if (encodedCharCode === undefined) {
