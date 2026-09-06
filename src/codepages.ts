@@ -14,7 +14,6 @@ export const codepages = [
   "H",
   "S",
   "K",
-  "8",
 ] as const;
 
 /** @internal */
